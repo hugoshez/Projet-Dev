@@ -227,37 +227,6 @@ class Enemy(Mob):
             self.image_orig.set_colorkey(s.BLACK)
             self.image = self.image_orig
 
-    def move(self):
-        if Enemy.seeing_player:
-            self.rotate(self.game.player.pos)
-        # set acc to 0 when not pressing so it will stop accelerating
-        self.acc = vec(0, 0)
-
-        if Enemy.seeing_player is True:
-            if self.game.player.pos.x > self.pos.x and self.game.player.pos.x > self.pos.x + 200:
-                self.vel.x += s.PLAYER_ACCELERATION
-            if self.game.player.pos.x < self.pos.x and self.game.player.pos.x < self.pos.x - 200:
-                self.vel.x -= s.PLAYER_ACCELERATION
-            if self.game.player.pos.y > self.pos.y and self.game.player.pos.y > self.pos.y + 200:
-                self.vel.y += s.PLAYER_ACCELERATION
-            if self.game.player.pos.y < self.pos.y and self.game.player.pos.y < self.pos.y - 200:
-                self.vel.y -= s.PLAYER_ACCELERATION
-
-        else:
-            choice = random.randrange(1, 5)
-            if choice == 1:
-                self.vel.x += s.PLAYER_ACCELERATION
-            elif choice == 2:
-                self.vel.x -= s.PLAYER_ACCELERATION
-            elif choice == 3:
-                self.vel.y += s.PLAYER_ACCELERATION
-            elif choice == 4:
-                self.vel.y -= s.PLAYER_ACCELERATION
-            else:
-                pass
-
-        self.move_calc()
-
     def act(self):
         if self.current_weapon is not None:
             if self.current_weapon.ammo == 0:
@@ -272,3 +241,55 @@ class Enemy(Mob):
             Enemy.seeing_player = True
         elif Enemy.last_seen_player + 2000 < pg.time.get_ticks():
             Enemy.seeing_player = False
+
+
+class Player2(Mob):
+    def __init__(self, game, spawn):
+        super().__init__(game, (11, 13), "gunguy.png", True, spawn)
+        self.mouse_offset = 0
+
+    def move(self):
+        self.rotate(pg.mouse.get_pos())
+        # set acc to 0 when not pressing so it will stop accelerating
+        self.acc = vec(0, 0)
+
+        # move on buttonpress
+        key_state = pg.key.get_pressed()
+        if key_state[s.move_up2]:
+            self.vel.y -= s.PLAYER_ACCELERATION
+        if key_state[s.move_down2]:
+            self.vel.y += s.PLAYER_ACCELERATION
+        if key_state[s.move_left2]:
+            self.vel.x -= s.PLAYER_ACCELERATION
+        if key_state[s.move_right2]:
+            self.vel.x += s.PLAYER_ACCELERATION
+
+        self.move_calc()
+
+    def act(self):
+        for event in self.game.all_events:
+            if event.type == pg.MOUSEBUTTONDOWN:
+                self.attack()
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_r:
+                    if self.current_weapon is not None:
+                        self.current_weapon.reload()
+                elif event.key == pg.K_e:
+                    if self.current_weapon is None:
+                        # pick up weapon
+                        hits = pg.sprite.spritecollide(self, self.game.items, False)
+                        if hits:
+                            self.current_weapon = hits[0]
+                            self.current_weapon.toggle_item()
+                            self.image_orig = self.spritesheet.get_image(self.anim_data["weapon"]["coords"][0],
+                                                       (self.img_dim))
+                            self.image_orig.set_colorkey(s.BLACK)
+                            # will kill() itself if not an item anymore
+                    else:
+                        # throw away weapon
+                        self.current_weapon.toggle_item()
+                        self.current_weapon.rect.center = self.pos
+                        self.current_weapon = None
+                        self.image_orig = self.spritesheet.get_image(self.anim_data["melee"]["coords"][0],
+                                                                     (self.img_dim))
+                        self.image_orig.set_colorkey(s.BLACK)

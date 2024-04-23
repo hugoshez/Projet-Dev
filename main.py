@@ -27,6 +27,7 @@ class Game:
         self.mobs = pg.sprite.Group()
         self.enemies = pg.sprite.Group()
         self.player = None
+        
 
     def new(self):
         # start new game
@@ -43,16 +44,17 @@ class Game:
         # OBJECTS
         l = sprites.Level(self, os.path.join(s.map_folder, "level.txt"), 60, 34)
         l.build()
-        mobs.Enemy.seeing_player = False
 
         pistol1 = sprites.Pistol(self, False)
         pistol3 = sprites.Pistol(self, True)
 
-        e1 = mobs.Enemy(self, (400, 150), pistol1)
-        e2 = mobs.Enemy(self, (1200, 700))
+
         # e2.current_weapon = pistol2 = sprites.Pistol(self, False)
         self.player = mobs.Player(self, (500, 700))
-        self.player2 = mobs.Player2(self, (600, 700))  # Nouveau joueur
+        pistol3.rect.x = 200
+        pistol3.rect.y = 800
+
+        self.player2 = mobs.Player2(self, (600, 700))
         pistol3.rect.x = 200
         pistol3.rect.y = 800
         # ADD TO SPRITE GROUP IN RIGHT ORDER, init player last
