@@ -1,9 +1,10 @@
-
 import os
 import pygame as pg
 import settings as s
 import sprites
 import mobs
+
+
 
 
 class Game:
@@ -27,6 +28,7 @@ class Game:
         self.mobs = pg.sprite.Group()
         self.enemies = pg.sprite.Group()
         self.player = None
+        self.level_number = 1  # Variable pour le numéro de niveau
         
 
     def new(self):
@@ -42,14 +44,13 @@ class Game:
         self.enemies = pg.sprite.Group()
 
         # OBJECTS
-        l = sprites.Level(self, os.path.join(s.map_folder, "level.txt"), 60, 34)
+        level_filename = f"level{self.level_number}.txt"  # Nom du fichier de niveau à charger
+        l = sprites.Level(self, os.path.join(s.map_folder, level_filename), 60, 34)  # Charger le niveau
         l.build()
 
         pistol1 = sprites.Pistol(self, False)
         pistol3 = sprites.Pistol(self, True)
 
-
-        # e2.current_weapon = pistol2 = sprites.Pistol(self, False)
         self.player = mobs.Player(self, (500, 700))
         pistol3.rect.x = 200
         pistol3.rect.y = 800
@@ -61,7 +62,6 @@ class Game:
 
         # run game AFTER everything is set up
         self.run()
-
 
 
     def run(self):
@@ -100,13 +100,25 @@ class Game:
                         pg.display.set_mode((s.WIDTH, s.HEIGHT), s.FLAGS | pg.FULLSCREEN)
                 elif event.key == pg.K_t:
                     print(str(self.clock.get_fps()))
-                                      
 
     def draw(self):
         pg.display.set_caption(s.TITLE + str(self.clock.get_fps()))
         # game loop - draw/ render
         self.screen.fill(s.BLACK)
         self.all_sprites.draw(self.screen)
+
+
+        # Affichage des noms des joueurs
+        font = pg.font.Font(None, 36)
+        player1_text = font.render("Player 1", True, s.WHITE)
+        player2_text = font.render("Player 2", True, s.WHITE)
+        self.screen.blit(player1_text, (10, 10))
+        self.screen.blit(player2_text, (s.WIDTH - player2_text.get_width() - 10, 10))
+
+        # Affichage du numéro du niveau
+        level_text = font.render(f"Level: {self.level_number}", True, s.WHITE)
+        self.screen.blit(level_text, (10, 50))  
+
 
         # *after* drawing everything, flip the display
         pg.display.flip()
@@ -123,7 +135,7 @@ g = Game()
 g.show_start_screen()
 while g.running:
     g.new()
+    g.level_number += 1  # Passage au niveau suivant
     g.show_go_screen()
 
 pg.quit()
-

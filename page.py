@@ -16,7 +16,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Page d'accueil de jeux")
 
 # Chargement de l'image de fond
-background = pygame.image.load("resources/img/pomme.webp").convert()
+background = pygame.image.load("resources/img/11.09.2001.jpg").convert()
 background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # Police de caractères
