@@ -1,6 +1,7 @@
 import pygame
 import os
 import sys
+import sqlite3
 
 # Initialisation de Pygame
 pygame.init()
@@ -66,6 +67,19 @@ def create_user():
         input_box.w = max(200, text_surface.get_width() + 10)
         pygame.display.flip()
 
+# Création ou connexion à la base de données SQLite
+conn = sqlite3.connect("users.db")
+cursor = conn.cursor()
+
+# Création de la table si elle n'existe pas
+cursor.execute('''CREATE TABLE IF NOT EXISTS users
+                  (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT)''')
+
+# Fonction pour insérer un utilisateur dans la base de données
+def insert_user(username):
+    cursor.execute("INSERT INTO users (username) VALUES (?)", (username,))
+    conn.commit()
+
 # Fonction principale
 def main():
     users = []
@@ -90,6 +104,7 @@ def main():
                 if event.key == pygame.K_c:
                     user = create_user()
                     users.append(user)
+                    insert_user(user.username)
                 elif event.key == pygame.K_e:
                     if len(users) > 0:
                         # Exécuter le fichier main.py
