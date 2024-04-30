@@ -14,6 +14,11 @@ move_down = getattr(pg, "K_" + (config.get("CONTROLS", "down")).lower())
 move_left = getattr(pg, "K_" + (config.get("CONTROLS", "left")).lower())
 move_right = getattr(pg, "K_" + (config.get("CONTROLS", "right")).lower())
 
+move_up2 = getattr(pg, "K_" + (config.get("CONTROLS_2", "up")))
+move_down2 = getattr(pg, "K_" + (config.get("CONTROLS_2", "down")))
+move_left2 = getattr(pg, "K_" + (config.get("CONTROLS_2", "left")))
+move_right2 = getattr(pg, "K_" + (config.get("CONTROLS_2", "right")))
+
 WIDTH = int(config.get("WINDOW", "width"))
 HEIGHT = int(config.get("WINDOW", "height"))
 
@@ -28,6 +33,7 @@ ALLOWED_EVENTS = [pg.KEYDOWN, pg.QUIT, pg.MOUSEBUTTONDOWN]
 PIXEL_MULT = 4
 TILESIZE = 8
 BULLET_SPEED = 20
+
 # set up assets path
 game_folder = os.path.dirname(__file__)
 resource_folder = "resources"
