@@ -3,6 +3,7 @@ import pygame as pg
 import settings as s
 import sprites
 import mobs
+import random
 
 
 
@@ -48,16 +49,31 @@ class Game:
         l = sprites.Level(self, os.path.join(s.map_folder, level_filename), 60, 34)  # Charger le niveau
         l.build()
 
-        pistol1 = sprites.Pistol(self, False)
-        pistol3 = sprites.Pistol(self, True)
+        # Spawn des joueurs
+        player_spawn_x = 200  # Position X du joueur 1
+        player_spawn_y = 100  # Position Y du joueur 1
+        player2_spawn_x = s.WIDTH - 200  # Position X du joueur 2 (sur l'autre côté de l'écran)
+        player2_spawn_y = 1000  # Position Y du joueur 2
+        self.player = mobs.Player(self, (player_spawn_x, player_spawn_y))
+        self.player2 = mobs.Player2(self, (player2_spawn_x, player2_spawn_y))
 
-        self.player = mobs.Player(self, (500, 700))
-        pistol3.rect.x = 200
-        pistol3.rect.y = 800
+        # Spawner un pistolet aléatoirement
+        pistol_spawn_x = random.randint(0, s.WIDTH)
+        pistol_spawn_y = random.randint(0, s.HEIGHT)
+        pistol = sprites.Pistol(self, True)
+        pistol.rect.x = pistol_spawn_x
+        pistol.rect.y = pistol_spawn_y
 
-        self.player2 = mobs.Player2(self, (600, 700))
-        pistol3.rect.x = 200
-        pistol3.rect.y = 800
+        #pistol1 = sprites.Pistol(self, False)
+        #pistol3 = sprites.Pistol(self, True)
+
+        #self.player = mobs.Player(self, (500, 700))
+        #pistol3.rect.x = 200
+        #pistol3.rect.y = 800
+
+        #self.player2 = mobs.Player2(self, (600, 700))
+        #pistol3.rect.x = 200
+        #pistol3.rect.y = 800
         # ADD TO SPRITE GROUP IN RIGHT ORDER, init player last
 
         # run game AFTER everything is set up
