@@ -3,6 +3,8 @@ import os
 import sys
 import sqlite3
 
+
+
 # Initialisation de Pygame
 pygame.init()
 

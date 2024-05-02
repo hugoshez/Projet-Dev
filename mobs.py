@@ -162,7 +162,7 @@ class Mob(pg.sprite.Sprite):
                     self.animation = None
 
 
-class Player(Mob):
+class Player(Mob):  #class parent
     def __init__(self, game, spawn):
         super().__init__(game, (11, 13), "gunguy.png", True, spawn)
         self.mouse_offset = 0
@@ -214,36 +214,10 @@ class Player(Mob):
                         self.image_orig.set_colorkey(s.BLACK)
 
 
-class Enemy(Mob):
-    seeing_player = False
-    last_seen_player = pg.time.get_ticks()
-
-    def __init__(self, game, spawn, weapon=None):
-        super().__init__(game, (11, 13), "gunguy.png", False, spawn)
-        self.player_offset = 0
-        self.current_weapon = weapon
-        if self.current_weapon is not None:
-            self.image_orig = self.spritesheet.get_image(self.anim_data["weapon"]["coords"][0], self.img_dim)
-            self.image_orig.set_colorkey(s.BLACK)
-            self.image = self.image_orig
-
-    def act(self):
-        if self.current_weapon is not None:
-            if self.current_weapon.ammo == 0:
-                self.current_weapon.reload()
-        self.look_for_player()
-        if Enemy.seeing_player and abs(self.pos.x - self.game.player.pos.x) <= 400 and abs(self.pos.y - self.game.player.pos.y) <= 400:
-            self.attack()
-
-    def look_for_player(self):
-        if abs(self.pos.x - self.game.player.pos.x) <= 200 and abs(self.pos.y - self.game.player.pos.y) <= 200:
-            Enemy.last_seen_player = pg.time.get_ticks()
-            Enemy.seeing_player = True
-        elif Enemy.last_seen_player + 2000 < pg.time.get_ticks():
-            Enemy.seeing_player = False
 
 
-class Player2(Mob):
+
+class Player2(Mob): #class enfant
     def __init__(self, game, spawn):
         super().__init__(game, (11, 13), "gunguy.png", True, spawn)
         self.mouse_offset = 0

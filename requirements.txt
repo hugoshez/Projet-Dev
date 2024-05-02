@@ -1,0 +1,8 @@
+os
+pygame 
+settings 
+sprites
+mobs
+pygame
+#os
+sqlite3
