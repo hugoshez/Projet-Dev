@@ -38,6 +38,10 @@ Dans la table gagnants, il y a 4 colonnes: (si le player1 gagne 2 maps alors on 
 
 brief : 
     les deux joueurs sont positionnés chacun à une extrémité de la map,
-    le premier sera le chasseur, le deuxième le lapin.
+    L'un des joueurs sera le chasseur, et l'autre sera le lapin.
     Le rôle de chacun sera définit par rapport à la position de l'arme qui est aléatoire, le premier à attraper l'arme sera le chasseur.
     Bonne chance.
+
+
+
+    le chasseur gagne s'il tue le lapin dans le temps imparti, sinon le lapin gagne.

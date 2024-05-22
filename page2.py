@@ -13,7 +13,7 @@ BG_COLOR = (255, 255, 255)
 
 # Initialisation de la fenêtre
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Page d'accueil de jeux")
+pygame.display.set_caption("Menu Principal")
 
 # Chargement de l'image de fond
 background = pygame.image.load("resources/img/11.09.2001.jpg").convert()
@@ -99,41 +99,90 @@ def insert_user(username):
     cursor.execute("INSERT INTO users (username) VALUES (?)", (username,))
     conn.commit()
 
-# Fonction principale
-def main():
-    users = []
-    running = True
-
-    while running:
+def show_menu():
+    while True:
         screen.blit(background, (0, 0))
-        display_message("Appuyez sur 'C' pour créer un utilisateur ou 'E' pour exécuter le jeu", (50, 50))
+        display_message("Menu Principal", (300, 50))
+        display_message("1. Créer un utilisateur", (300, 150))
+        display_message("2. Démarrer le jeu", (300, 250))
+        display_message("3. Instructions", (300, 350))
+        display_message("4. Quitter", (300, 450))
+        pygame.display.flip()
 
-        # Affichage des utilisateurs créés
-        if users:
-            display_message("Utilisateurs créés :", (50, 100))
-            for i, user in enumerate(users):
-                display_message(f"{i + 1}. {user.username}", (50, 150 + i * 50))
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_1:
+                    user = create_user()
+                    if user:
+                        insert_user(user.username)
+                elif event.key == pygame.K_2:
+                    start_game()
+                elif event.key == pygame.K_3:
+                    show_instructions()
+                elif event.key == pygame.K_4:
+                    pygame.quit()
+                    sys.exit()
 
+def start_game():
+    running = True
+    while running:
+        screen.fill(BG_COLOR)
+        display_message("Jeu en cours... Appuyez sur 'Q' pour quitter", (100, 100))
         pygame.display.flip()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_c:
-                    user = create_user()
-                    users.append(user)
-                    insert_user(user.username)
-                elif event.key == pygame.K_e:
-                    if len(users) > 0:
-                        # Exécuter le fichier main.py
-                        os.system('python3 main.py')
-                        running = False
-                    else:
-                        print("Aucun utilisateur créé. Veuillez créer un utilisateur avant de démarrer le jeu.")
+                if event.key == pygame.K_q:
+                    running = False
 
-    pygame.quit()
-    sys.exit()
+    show_end_screen()
+
+def show_end_screen():
+    running = True
+    while running:
+        screen.fill(BG_COLOR)
+        display_message("Fin de la partie. Appuyez sur 'M' pour retourner au menu principal", (50, 100))
+        pygame.display.flip()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_m:
+                    running = False
+
+    show_menu()
+
+def show_instructions():
+    running = True
+    while running:
+        screen.fill(BG_COLOR)
+        display_message("Instructions du jeu:", (50, 50))
+        display_message("1. Utilisez les flèches du clavier pour déplacer.", (50, 100))
+        display_message("2. Appuyez sur 'Q' pour quitter le jeu.", (50, 150))
+        display_message("3. Appuyez sur 'M' pour retourner au menu principal.", (50, 200))
+        display_message("Appuyez sur 'M' pour retourner au menu principal", (50, 300))
+        pygame.display.flip()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_m:
+                    running = False
+
+    show_menu()
+
+# Fonction principale
+def main():
+    show_menu()
 
 if __name__ == "__main__":
     main()
