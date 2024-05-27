@@ -57,7 +57,7 @@ def show_instructions():
                 pygame.quit()
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_m:
+                if event.key == pygame.K_BACKSPACE:
                     running = False
 
 def main():

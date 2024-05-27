@@ -19,6 +19,9 @@ pygame.display.set_caption("Page d'accueil de jeux")
 background = pygame.image.load("resources/img/11.09.2001.jpg").convert()
 background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
+users = []
+
+
 # Police de caractères
 font = pygame.font.Font(None, 36)
 
@@ -39,6 +42,7 @@ def display_message(message, pos):
 class User:
     def __init__(self, username):
         self.username = username
+        self.scores = 0
 
 def create_user():
     input_box = pygame.Rect(300, 400, 200, 50)
@@ -90,18 +94,18 @@ def create_user():
 conn = sqlite3.connect("users.db")
 cursor = conn.cursor()
 
-# Création de la table si elle n'existe pas
+# Création de la table si elle n'existe pas (avec la colonne scores)
 cursor.execute('''CREATE TABLE IF NOT EXISTS users
-                  (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT)''')
+                  (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, scores INTEGER)''')
 
-# Fonction pour insérer un utilisateur dans la base de données
-def insert_user(username):
-    cursor.execute("INSERT INTO users (username) VALUES (?)", (username,))
+# Fonction pour insérer un utilisateur avec son score dans la base de données
+def insert_user(username, scores):
+    cursor.execute("INSERT INTO users (username, scores) VALUES (?, ?)", (username, scores))
     conn.commit()
+
 
 # Fonction principale
 def main():
-    users = []
     running = True
 
     while running:
@@ -123,7 +127,7 @@ def main():
                 if event.key == pygame.K_c:
                     user = create_user()
                     users.append(user)
-                    insert_user(user.username)
+                    insert_user(user.username, user.scores)
                 elif event.key == pygame.K_e:
                     if len(users) > 0:
                         # Exécuter le fichier main.py

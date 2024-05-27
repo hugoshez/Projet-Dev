@@ -4,7 +4,8 @@ import settings as s
 import sprites
 import mobs
 import random
-
+import sqlite3
+from page_fdp import show_end_game
 
 
 
@@ -83,6 +84,9 @@ class Game:
     def run(self):
         # game loop
         self.playing = True
+        self.counter = 30
+        pg.time.set_timer(pg.USEREVENT, 1000)
+
         while self.playing:
             self.clock.tick(s.FPS)
             self.handle_events()
@@ -116,39 +120,44 @@ class Game:
                         pg.display.set_mode((s.WIDTH, s.HEIGHT), s.FLAGS | pg.FULLSCREEN)
                 elif event.key == pg.K_t:
                     print(str(self.clock.get_fps()))
+            elif event.type == pg.USEREVENT: 
+                self.counter -= 1
+                if self.counter == 0:
+                    self.playing = False
+                    self.running = False
+                    
+                    show_end_game(self.player.scores, self.player2.scores)
 
     def draw(self):
         pg.display.set_caption(s.TITLE + str(self.clock.get_fps()))
         # game loop - draw/ render
         self.screen.fill(s.BLACK)
         self.all_sprites.draw(self.screen)
+        
+
+        conn = sqlite3.connect("users.db")
+        cursor = conn.cursor()
+
+        # Création de la table si elle n'existe pas (avec la colonne scores)
+        names = cursor.execute('''SELECT username FROM users WHERE scores = 0''').fetchall()
 
 
         # Affichage des noms des joueurs
         font = pg.font.Font(None, 36)
-        player1_text = font.render("Player 1", True, s.WHITE)
-        player2_text = font.render("Player 2", True, s.WHITE)
+        player1_text = font.render(str(list(names)[-2][0]), True, s.WHITE)
+        player2_text = font.render(str(list(names)[-1][0]), True, s.WHITE)
         self.screen.blit(player1_text, (10, 10))
         self.screen.blit(player2_text, (s.WIDTH - player2_text.get_width() - 10, 10))
 
         # Affichage du numéro du niveau
-        level_text = font.render(f"Level: {self.level_number}", True, s.WHITE)
+        level_text = font.render(f"Level: {self.level_number} | Timer : {self.counter}", True, s.WHITE)
         self.screen.blit(level_text, (10, 50))  
 
 
         # *after* drawing everything, flip the display
         pg.display.flip()
 
-    def show_start_screen(self):
-        # show splash/ start screen
-        pass
-
-    def show_go_screen(self):
-        # show game over screen
-        pass
-
 g = Game()
-g.show_start_screen()
 while g.running:
     g.new()
     g.level_number += 1  # Passage au niveau suivant

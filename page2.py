@@ -90,13 +90,13 @@ def create_user():
 conn = sqlite3.connect("users.db")
 cursor = conn.cursor()
 
-# Création de la table si elle n'existe pas
+# Création de la table si elle n'existe pas (avec la colonne scores)
 cursor.execute('''CREATE TABLE IF NOT EXISTS users
-                  (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT)''')
+                  (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, scores INTEGER)''')
 
-# Fonction pour insérer un utilisateur dans la base de données
-def insert_user(username):
-    cursor.execute("INSERT INTO users (username) VALUES (?)", (username,))
+# Fonction pour insérer un utilisateur avec son score dans la base de données
+def insert_user(username, scores):
+    cursor.execute("INSERT INTO users (username, scores) VALUES (?, ?)", (username, scores))
     conn.commit()
 
 def show_menu():

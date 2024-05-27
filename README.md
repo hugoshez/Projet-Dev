@@ -39,3 +39,12 @@
     écran d’option :
         - [ ] il devra permettre aux joueurs de modifier toutes leurs données (puissance de tir, vitesses ...) 
         - [ ] ces données devront être stockées dans une base de données, afin de pouvoir les réutilisées même après fermeture du logiciel 
+
+
+
+
+timer
+
+score
+
+écran de fin
