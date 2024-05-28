@@ -104,6 +104,10 @@ def insert_user(username, scores):
     conn.commit()
 
 
+
+
+
+
 # Fonction principale
 def main():
     running = True

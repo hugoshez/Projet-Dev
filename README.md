@@ -43,8 +43,6 @@
 
 
 
-timer
-
 score
-
-écran de fin
+noms des jouers et score sur fdp
+fin du chrono arrete la partie au lieu de passer au niveau suivant

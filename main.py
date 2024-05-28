@@ -5,8 +5,13 @@ import sprites
 import mobs
 import random
 import sqlite3
-from page_fdp import show_end_game
+import page_fdp as show_fdp
 
+def update_user(username, scores):
+    db = sqlite3.connect("users.db")
+    cursor = db.cursor()
+    cursor.execute("UPDATE users SET scores = ? WHERE username = ?", (scores, username))
+    db.commit()
 
 
 class Game:
@@ -113,7 +118,7 @@ class Game:
                     if self.playing:
                         self.playing = False
                     self.running = False
-                elif event.key == pg.K_F11:
+                if event.key == pg.K_F11:
                     if self.screen.get_flags() & pg.FULLSCREEN:
                         pg.display.set_mode((s.WIDTH, s.HEIGHT), s.FLAGS)
                     else:
@@ -123,10 +128,14 @@ class Game:
             elif event.type == pg.USEREVENT: 
                 self.counter -= 1
                 if self.counter == 0:
-                    self.playing = False
-                    self.running = False
-                    
-                    show_end_game(self.player.scores, self.player2.scores)
+                    if self.level_number < 3:
+                        self.level_number += 1
+                    elif self.level_number == 4:
+                        print("Fin de partie")
+                        os.system('python3 page_fdp()')
+                        print("Fin de jeu")
+                        self.playing = False
+                        self.running = False
 
     def draw(self):
         pg.display.set_caption(s.TITLE + str(self.clock.get_fps()))
@@ -157,10 +166,17 @@ class Game:
         # *after* drawing everything, flip the display
         pg.display.flip()
 
+
+
 g = Game()
 while g.running:
     g.new()
     g.level_number += 1  # Passage au niveau suivant
-    g.show_go_screen()
+    # print the death player
+    print(g.player.kill)
+    print(g.level_number)
+    if g.level_number == 4:
+        show_fdp.show_fdp()
+        g.running = False
 
 pg.quit()

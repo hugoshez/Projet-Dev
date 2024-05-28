@@ -1,5 +1,6 @@
 import pygame
 import sys
+import sqlite3
 
 # Initialisation de Pygame
 pygame.init()
@@ -11,7 +12,7 @@ BG_COLOR = (255, 255, 255)
 
 # Initialisation de la fenêtre
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Fin de Partie")
+pygame.display.set_caption("Instructions")
 
 # Police de caractères
 font = pygame.font.Font(None, 36)
@@ -30,19 +31,40 @@ def display_message(message, pos):
     # Afficher le texte rouge par-dessus le contour
     screen.blit(text_red, text_rect)
 
-def show_end_game(score, leaderboard):
+def get_scores(username):
+    db = sqlite3.connect("users.db")
+    cursor = db.cursor()
+
+
+    return str(cursor.execute("SELECT scores FROM users WHERE username = ?", (username,)).fetchone()[0])
+
+
+
+def show_fdp():
     running = True
+    db = sqlite3.connect("users.db")
+    cursor = db.cursor()
+
+    res = cursor.execute('''SELECT username FROM users ORDER BY id DESC LIMIT 2''').fetchall()
+
+
     while running:
         screen.fill(BG_COLOR)
-        display_message("Fin de la Partie", (SCREEN_WIDTH // 2, 50))
-        display_message(f"Votre score : {score}", (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
+        display_message("Fin De Partie", (SCREEN_WIDTH // 2, 50))
         
-        # Affichage du classement des joueurs
-        display_message("Classement des Joueurs :", (SCREEN_WIDTH // 2, 250))
-        for i, (player, player_score) in enumerate(leaderboard, start=1):
-            display_message(f"{i}. {player} - {player_score}", (SCREEN_WIDTH // 2, 250 + i * 40))
+        # Mettre à jour la liste `fdp` avec les noms d'utilisateur
+        fdp = [
+            f"1. {res[0][0]}" + " : " + get_scores(res[0][0]) if len(res) > 0 else "1.",
+            f"2. {res[1][0]}" + " : " + get_scores(res[1][0])  if len(res) > 1 else "2.",
+        ]
 
+        # Afficher les noms d'utilisateur
+        display_message(fdp[0]  , (SCREEN_WIDTH // 2, 100))
+        display_message(fdp[1] , (SCREEN_WIDTH // 2, 150))
+        
+             # Afficher le message de retour
         display_message("Appuyez sur 'Retour' pour revenir au menu principal", (SCREEN_WIDTH // 2, SCREEN_HEIGHT - 50))
+        
         pygame.display.flip()
 
         for event in pygame.event.get():
@@ -53,9 +75,10 @@ def show_end_game(score, leaderboard):
                 if event.key == pygame.K_BACKSPACE:
                     running = False
 
+    db.close()
+
 def main():
-    leaderboard = [("Joueur1", 1500), ("Joueur2", 1200)]  # Exemple de classement, remplacez-le par le classement réel
-    show_end_game(leaderboard)
+    show_fdp()
 
 if __name__ == "__main__":
     main()
