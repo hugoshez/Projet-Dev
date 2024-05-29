@@ -7,7 +7,7 @@ import random
 import sqlite3
 import page_fdp as show_fdp
 
-def update_user(username, scores):
+def update_score(username, scores):
     db = sqlite3.connect("users.db")
     cursor = db.cursor()
     cursor.execute("UPDATE users SET scores = ? WHERE username = ?", (scores, username))
@@ -70,26 +70,13 @@ class Game:
         pistol.rect.x = pistol_spawn_x
         pistol.rect.y = pistol_spawn_y
 
-        #pistol1 = sprites.Pistol(self, False)
-        #pistol3 = sprites.Pistol(self, True)
-
-        #self.player = mobs.Player(self, (500, 700))
-        #pistol3.rect.x = 200
-        #pistol3.rect.y = 800
-
-        #self.player2 = mobs.Player2(self, (600, 700))
-        #pistol3.rect.x = 200
-        #pistol3.rect.y = 800
-        # ADD TO SPRITE GROUP IN RIGHT ORDER, init player last
-
-        # run game AFTER everything is set up
         self.run()
 
 
     def run(self):
         # game loop
         self.playing = True
-        self.counter = 30
+        self.counter = 10
         pg.time.set_timer(pg.USEREVENT, 1000)
 
         while self.playing:
@@ -130,12 +117,17 @@ class Game:
                 if self.counter == 0:
                     if self.level_number < 3:
                         self.level_number += 1
-                    elif self.level_number == 4:
-                        print("Fin de partie")
-                        os.system('python3 page_fdp()')
-                        print("Fin de jeu")
+                        self.counter = 10
+                        self.new()
+                    elif self.level_number == 3:
+                        #fermer la fenetre principale
+                        os.system('python3 page_fdp.py')
                         self.playing = False
                         self.running = False
+                        print("Fin de partie")
+                        os.system('python3 page_fdp.py')
+                        print("Fin de jeu")
+
 
     def draw(self):
         pg.display.set_caption(s.TITLE + str(self.clock.get_fps()))
@@ -171,8 +163,7 @@ class Game:
 g = Game()
 while g.running:
     g.new()
-    g.level_number += 1  # Passage au niveau suivant
-    # print the death player
+    g.level_number += 1 
     print(g.player.kill)
     print(g.level_number)
     if g.level_number == 4:

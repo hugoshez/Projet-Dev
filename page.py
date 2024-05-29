@@ -103,11 +103,6 @@ def insert_user(username, scores):
     cursor.execute("INSERT INTO users (username, scores) VALUES (?, ?)", (username, scores))
     conn.commit()
 
-
-
-
-
-
 # Fonction principale
 def main():
     running = True

@@ -40,7 +40,7 @@ class Level(pg.sprite.Sprite):
 
     # adds all level tiles to group as sprites
     def build(self):
-        with open(self.level_file, 'r') as f:
+        with open(self.level_file) as f:
             for ln, line in enumerate(f.readlines()):
                 for cn, char in enumerate(line):
                     try:

@@ -151,7 +151,6 @@ class Pistol(Weapon):
 
 
 class VisionRay(pg.sprite.Sprite):
-    # debugging for now
     def __init__(self, game, mob):
         super().__init__(self)
         self.game = game
