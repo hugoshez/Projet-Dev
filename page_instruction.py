@@ -16,6 +16,10 @@ pygame.display.set_caption("Instructions")
 # Police de caractères
 font = pygame.font.Font(None, 36)
 
+# Chargement de l'image de fond
+background = pygame.image.load("resources/img/son_of_the_forest.JPG").convert()
+background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
+
 def display_message(message, pos):
     # Créer le texte en rouge
     text_red = font.render(message, True, (255, 0, 0))
@@ -33,7 +37,7 @@ def display_message(message, pos):
 def show_instructions():
     running = True
     while running:
-        screen.fill(BG_COLOR)
+        screen.blit(background, (0, 0))
         display_message("Instructions", (SCREEN_WIDTH // 2, 50))
         instructions = [
             "1. Le joueur 1 utilise les touches 'ZQSD' pour se déplacer.",

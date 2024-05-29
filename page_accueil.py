@@ -15,7 +15,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Page d'accueil")
 
 # Chargement de l'image de fond
-background = pygame.image.load("resources/img/11.09.2001.jpg").convert()
+background = pygame.image.load("resources/img/son_of_the_forest.JPG").convert()
 background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # Police de caractères
@@ -53,11 +53,11 @@ def show_welcome_screen():
 def show_main_menu():
     running = True
     while running:
-        screen.fill(BG_COLOR)
+        screen.blit(background, (0, 0))
         display_message("Menu Principal", (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 100))
         display_message("1. Commencer le jeu", (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
         display_message("2. Instructions", (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50))
-        display_message("3. Quitter", (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 100))
+        display_message("retour pour quitter", (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 100))
         pygame.display.flip()
 
         for event in pygame.event.get():
@@ -66,12 +66,12 @@ def show_main_menu():
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
-                    print("Démarrer le jeu")  # Remplacez par la fonction de démarrage du jeu
+                    print("Démarrer le jeu")  
                     os.system('python3 page.py')
                 elif event.key == pygame.K_2:
-                    print("Afficher les instructions")  # Remplacez par la fonction d'affichage des instructions
+                    print("Afficher les instructions")
                     os.system('python3 page_instruction.py')
-                elif event.key == pygame.K_3:
+                elif event.key == pygame.K_BACKSPACE:
                     pygame.quit()
                     sys.exit()
 

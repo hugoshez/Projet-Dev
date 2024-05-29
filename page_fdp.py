@@ -14,6 +14,12 @@ BG_COLOR = (255, 255, 255)
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Instructions")
 
+
+# Chargement de l'image de fond
+background = pygame.image.load("resources/img/son_of_the_forest.JPG").convert()
+background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
+
+
 # Police de caractères
 font = pygame.font.Font(None, 36)
 

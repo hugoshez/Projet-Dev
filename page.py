@@ -16,7 +16,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Page d'accueil de jeux")
 
 # Chargement de l'image de fond
-background = pygame.image.load("resources/img/11.09.2001.jpg").convert()
+background = pygame.image.load("resources/img/son_of_the_forest.JPG").convert()
 background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
 users = []
@@ -114,13 +114,15 @@ def main():
 
     while running:
         screen.blit(background, (0, 0))
-        display_message("Appuyez sur 'C' pour créer un utilisateur ou 'E' pour exécuter le jeu", (50, 50))
+        display_message("Appuyez sur 'C' pour créer un utilisateur,", (50, 50))
+        display_message("Appuyez sur 'E' pour exécuter le jeu", (50, 100))
+
 
         # Affichage des utilisateurs créés
         if users:
-            display_message("Utilisateurs créés :", (50, 100))
+            display_message("Utilisateurs créés :", (50, 200))
             for i, user in enumerate(users):
-                display_message(f"{i + 1}. {user.username}", (50, 150 + i * 50))
+                display_message(f"{i + 1}. {user.username}", (50, 250 + i * 50))
 
         pygame.display.flip()
 

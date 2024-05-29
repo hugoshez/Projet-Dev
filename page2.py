@@ -16,7 +16,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Menu Principal")
 
 # Chargement de l'image de fond
-background = pygame.image.load("resources/img/11.09.2001.jpg").convert()
+background = pygame.image.load("resources/img/son_of_the_forest.JPG").convert()
 background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # Police de caractères
