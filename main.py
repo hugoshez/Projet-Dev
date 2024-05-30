@@ -6,6 +6,7 @@ import mobs
 import random
 import sqlite3
 import page_fdp as show_fdp
+import page_fdp as get_scores
 
 def update_score(username, scores):
     db = sqlite3.connect("users.db")
@@ -76,7 +77,7 @@ class Game:
     def run(self):
         # game loop
         self.playing = True
-        self.counter = 10
+        self.counter = 30
         pg.time.set_timer(pg.USEREVENT, 1000)
 
         while self.playing:
@@ -165,6 +166,14 @@ while g.running:
     g.new()
     g.level_number += 1 
     print(g.player.kill)
+    if g.player.kill:
+        print("player1 ") 
+        print(g.player.groups)
+        #update_score("player1", get_scores(g.player.groups.2) + 1)
+    if g.player2.kill:
+        print("player2")
+        print(g.player2.groups)
+        #update_score("player2", get_scores(g.player2.username)  +1)
     print(g.level_number)
     if g.level_number == 4:
         show_fdp.show_fdp()
